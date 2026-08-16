@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeSuccessButton = document.getElementById('closeSuccessButton');
     
     // GAS WebアプリのURL
-    const gasUrl = 'https://script.google.com/macros/s/AKfycbyfbT1EweQKDKvd3KMxzT3m06seRXU7oSdinqb2W21pMd1KTQnG1YcLYg7qLqHxAuY/exec';
+    const gasUrl = 'https://google.com';
     
     if (submitButton && rsvpForm) {
         submitButton.addEventListener('click', async function(e) {
