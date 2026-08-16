@@ -96,7 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const files = Array.from(e.target.files);
             
             files.forEach(file => {
-                if (file.type.startsWith('image/')) {
+                // 画像または動画ファイルのみ受け入れ
+                if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
                     selectedFiles.push(file);
                     addPhotoPreview(file);
                 }
@@ -112,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // 写真プレビューを追加
+    // 写真・動画プレビューを追加
     function addPhotoPreview(file) {
         const reader = new FileReader();
         const fileId = 'file_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
@@ -122,10 +123,18 @@ document.addEventListener('DOMContentLoaded', function() {
             previewItem.className = 'photo-preview-item';
             previewItem.dataset.fileId = fileId;
             
+            // 画像か動画かで表示を切り替え
+            let mediaHTML;
+            if (file.type.startsWith('image/')) {
+                mediaHTML = `<img src="${e.target.result}" alt="Preview">`;
+            } else if (file.type.startsWith('video/')) {
+                mediaHTML = `<video src="${e.target.result}" controls style="width: 100%; height: 200px; object-fit: cover;"></video>`;
+            }
+            
             previewItem.innerHTML = `
-                <img src="${e.target.result}" alt="Preview">
+                ${mediaHTML}
                 <p class="photo-preview-filename">${file.name}</p>
-                <button class="photo-delete-button" data-file-id="${fileId}">×</button>
+                <button type="button" class="photo-delete-button" data-file-id="${fileId}">×</button>
             `;
             
             photoPreviewContainer.appendChild(previewItem);
@@ -157,14 +166,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // フォーム送信処理
+    // フォーム送信処理（GAS連携）
     const submitButton = document.getElementById('submitButton');
     const rsvpForm = document.getElementById('rsvpForm');
     const successOverlay = document.getElementById('successOverlay');
     const closeSuccessButton = document.getElementById('closeSuccessButton');
     
+    // GAS WebアプリのURL
+    const gasUrl = 'https://script.google.com/macros/s/AKfycbyfbT1EweQKDKvd3KMxzT3m06seRXU7oSdinqb2W21pMd1KTQnG1YcLYg7qLqHxAuY/exec';
+    
     if (submitButton && rsvpForm) {
-        submitButton.addEventListener('click', function(e) {
+        submitButton.addEventListener('click', async function(e) {
             e.preventDefault();
             
             // フォームバリデーション
@@ -173,29 +185,102 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // フォームデータを取得
-            const formData = new FormData(rsvpForm);
-            const data = {
-                name: formData.get('guestName'),
-                email: formData.get('guestEmail'),
-                attendance: formData.get('attendance'),
-                companion: formData.get('companion'),
-                companionName: formData.get('companionName'),
-                allergies: formData.get('allergies'),
-                message: formData.get('message'),
-                photoComment: document.getElementById('photoComment').value,
-                photos: selectedFiles.map(file => file.name)
-            };
+            // 送信ボタンを無効化
+            submitButton.disabled = true;
+            const originalButtonText = submitButton.textContent;
+            submitButton.textContent = '送信中...';
             
-            console.log('送信データ:', data);
-            console.log('選択された写真:', selectedFiles);
-            
-            // ここで実際の送信処理を実装
-            // 例: fetch API でサーバーに送信、またはGoogle Driveにアップロード等
-            
-            // 送信完了メッセージを表示
-            showSuccessMessage();
+            try {
+                // フォームデータを取得
+                const formData = new FormData(rsvpForm);
+                
+                // ファイルをBase64に変換
+                const filesData = await Promise.all(
+                    selectedFiles.map(file => convertFileToBase64(file))
+                );
+                
+                // 送信データの構築
+                const data = {
+                    name: formData.get('guestName'),
+                    email: formData.get('guestEmail'),
+                    attendance: formData.get('attendance'),
+                    companion: formData.get('companion'),
+                    companionName: formData.get('companionName') || '',
+                    allergies: formData.get('allergies') || '',
+                    message: formData.get('message') || '',
+                    photoComment: document.getElementById('photoComment').value || '',
+                    files: filesData
+                };
+                
+                console.log('送信データ:', data);
+                
+                // GASへ送信
+                const response = await fetch(gasUrl, {
+                    method: 'POST',
+                    mode: 'no-cors', // GASの場合はno-corsを使用
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                // no-corsの場合、レスポンスを直接読めないため、送信が完了したとみなす
+                console.log('送信完了');
+                
+                // 成功メッセージを表示
+                alert('ご回答ありがとうございました！');
+                showSuccessMessage();
+                
+                // フォームをリセット
+                resetForm();
+                
+            } catch (error) {
+                console.error('送信エラー:', error);
+                alert('送信中にエラーが発生しました。もう一度お試しください。');
+            } finally {
+                // ボタンを元に戻す
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
         });
+    }
+    
+    // ファイルをBase64に変換する関数
+    function convertFileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64String = e.target.result.split(',')[1]; // "data:image/png;base64," を除去
+                resolve({
+                    fileData: base64String,
+                    fileName: file.name,
+                    fileType: file.type
+                });
+            };
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+        });
+    }
+    
+    // フォームをリセットする関数
+    function resetForm() {
+        if (rsvpForm) {
+            rsvpForm.reset();
+        }
+        
+        // 写真をクリア
+        selectedFiles = [];
+        photoPreviewContainer.innerHTML = '';
+        if (photoCommentGroup) {
+            photoCommentGroup.style.display = 'none';
+        }
+        document.getElementById('photoComment').value = '';
+        
+        // 同伴者名前欄を非表示
+        const companionNameGroup = document.getElementById('companionNameGroup');
+        if (companionNameGroup) {
+            companionNameGroup.style.display = 'none';
+        }
     }
     
     // 成功メッセージを表示
@@ -211,24 +296,6 @@ document.addEventListener('DOMContentLoaded', function() {
         closeSuccessButton.addEventListener('click', function() {
             successOverlay.style.display = 'none';
             document.body.style.overflow = ''; // スクロール復元
-            
-            // フォームをリセット
-            if (rsvpForm) {
-                rsvpForm.reset();
-            }
-            
-            // 写真をクリア
-            selectedFiles = [];
-            photoPreviewContainer.innerHTML = '';
-            if (photoCommentGroup) {
-                photoCommentGroup.style.display = 'none';
-            }
-            document.getElementById('photoComment').value = '';
-            
-            // 同伴者名前欄を非表示
-            if (companionNameGroup) {
-                companionNameGroup.style.display = 'none';
-            }
             
             // ページトップへスクロール
             window.scrollTo({ top: 0, behavior: 'smooth' });
