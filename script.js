@@ -194,10 +194,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 // フォームデータを取得
                 const formData = new FormData(rsvpForm);
                 
+                console.log('選択されたファイル数:', selectedFiles.length);
+                
                 // ファイルをBase64に変換
                 const filesData = await Promise.all(
                     selectedFiles.map(file => convertFileToBase64(file))
                 );
+                
+                console.log('変換されたファイルデータ:', filesData);
+                console.log('files配列の要素数:', filesData.length);
                 
                 // 送信データの構築
                 const data = {
@@ -212,7 +217,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     files: filesData
                 };
                 
-                console.log('送信データ:', data);
+                console.log('=== 送信データ全体 ===');
+                console.log('送信先URL:', gasUrl);
+                console.log('name:', data.name);
+                console.log('attendance:', data.attendance);
+                console.log('message:', data.message);
+                console.log('files配列:', data.files);
+                if (data.files.length > 0) {
+                    console.log('最初のファイル情報:');
+                    console.log('  - fileName:', data.files[0].fileName);
+                    console.log('  - fileType:', data.files[0].fileType);
+                    console.log('  - fileData length:', data.files[0].fileData.length, '文字');
+                    console.log('  - fileData (最初の100文字):', data.files[0].fileData.substring(0, 100));
+                }
+                console.log('JSONサイズ:', JSON.stringify(data).length, 'bytes');
+                console.log('======================');
                 
                 // GASへ送信
                 const response = await fetch(gasUrl, {
@@ -248,16 +267,43 @@ document.addEventListener('DOMContentLoaded', function() {
     // ファイルをBase64に変換する関数
     function convertFileToBase64(file) {
         return new Promise((resolve, reject) => {
+            console.log(`ファイル変換開始: ${file.name} (${file.type}, ${file.size} bytes)`);
+            
             const reader = new FileReader();
+            
             reader.onload = function(e) {
-                const base64String = e.target.result.split(',')[1]; // "data:image/png;base64," を除去
-                resolve({
-                    fileData: base64String,
-                    fileName: file.name,
-                    fileType: file.type
-                });
+                try {
+                    const result = e.target.result;
+                    console.log(`読み込み完了: ${file.name}`);
+                    console.log(`  - result type: ${typeof result}`);
+                    console.log(`  - result length: ${result.length}`);
+                    console.log(`  - result prefix: ${result.substring(0, 50)}`);
+                    
+                    // "data:image/png;base64," などを除去して純粋なBase64データのみを抽出
+                    const base64String = result.split(',')[1];
+                    
+                    console.log(`  - Base64 length: ${base64String.length}`);
+                    console.log(`  - Base64 prefix: ${base64String.substring(0, 50)}`);
+                    
+                    const fileData = {
+                        fileData: base64String,
+                        fileName: file.name,
+                        fileType: file.type
+                    };
+                    
+                    console.log(`変換成功: ${file.name}`);
+                    resolve(fileData);
+                } catch (error) {
+                    console.error(`変換エラー: ${file.name}`, error);
+                    reject(error);
+                }
             };
-            reader.onerror = reject;
+            
+            reader.onerror = function(error) {
+                console.error(`読み込みエラー: ${file.name}`, error);
+                reject(error);
+            };
+            
             reader.readAsDataURL(file);
         });
     }
