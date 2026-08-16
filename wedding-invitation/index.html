@@ -13,7 +13,7 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-image">
-            <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80" alt="Wedding">
+            <img src="images/main.jpg" alt="Wedding">
         </div>
         <div class="hero-content">
             <p class="hero-subtitle">WEDDING INVITATION</p>
@@ -55,7 +55,7 @@
         </div>
         <div class="story-images">
             <div class="story-image">
-                <img src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=800&q=80" alt="Our Story">
+                <img src="images/meat.JPG" alt="Our Story">
             </div>
             <div class="story-text-block">
                 <h3 class="story-subtitle">出会い</h3>
@@ -65,7 +65,7 @@
                 </p>
             </div>
             <div class="story-image">
-                <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=800&q=80" alt="Our Story">
+                <img src="images/12.25.jpg" alt="Our Story">
             </div>
             <div class="story-text-block">
                 <h3 class="story-subtitle">プロポーズ</h3>
@@ -103,7 +103,7 @@
     <!-- Venue Section -->
     <section class="section venue-section">
         <div class="venue-image">
-            <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=1600&q=80" alt="Venue">
+            <img src="images/21_ext_3_2.webp" alt="Venue">
         </div>
         <div class="section-content">
             <h2 class="section-title-en">VENUE</h2>
@@ -145,10 +145,108 @@
             <p class="section-title-jp">出欠のご連絡</p>
             <div class="rsvp-content">
                 <p class="rsvp-deadline">2026年10月15日までに<br>お知らせください</p>
-                <button class="rsvp-button" id="rsvpButton">出欠を返信する</button>
+                
+                <!-- RSVP Form -->
+                <form class="rsvp-form" id="rsvpForm">
+                    <div class="form-group">
+                        <label for="guestName">お名前 <span class="required">*</span></label>
+                        <input type="text" id="guestName" name="guestName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="guestEmail">メールアドレス <span class="required">*</span></label>
+                        <input type="email" id="guestEmail" name="guestEmail" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>出欠 <span class="required">*</span></label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="attendance" value="attend" required>
+                                <span>出席</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="attendance" value="absent">
+                                <span>欠席</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>同伴者の有無</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="companion" value="yes" id="companionYes">
+                                <span>有り</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="companion" value="no" id="companionNo" checked>
+                                <span>無し</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group companion-name-group" id="companionNameGroup" style="display: none;">
+                        <label for="companionName">同伴者のお名前</label>
+                        <input type="text" id="companionName" name="companionName">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="allergies">アレルギー・食事制限</label>
+                        <textarea id="allergies" name="allergies" rows="3" placeholder="特にない場合は空欄で構いません"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">新郎新婦へのメッセージ</label>
+                        <textarea id="message" name="message" rows="4" placeholder="お祝いのメッセージをお聞かせください"></textarea>
+                    </div>
+                </form>
             </div>
         </div>
     </section>
+
+    <!-- Memories Section -->
+    <section class="section memories-section">
+        <div class="section-content">
+            <h2 class="section-title-en">OUR MEMORIES</h2>
+            <p class="section-title-jp">思い出の写真</p>
+            <div class="memories-intro">
+                <p>私たちとの思い出の写真があれば、ぜひお送りください。</p>
+                <p>皆さまとの思い出を、結婚式当日にも一緒に楽しめたら嬉しいです。</p>
+            </div>
+            
+            <div class="memories-content">
+                <div class="photo-upload-section">
+                    <input type="file" id="photoUpload" accept="image/*" multiple style="display: none;">
+                    <button class="photo-upload-button" id="photoUploadButton">
+                        <span class="upload-icon">📷</span>
+                        <span>思い出の写真を選択</span>
+                    </button>
+                    <p class="upload-note">複数枚選択できます</p>
+                </div>
+
+                <div class="photo-preview-container" id="photoPreviewContainer"></div>
+
+                <div class="form-group photo-comment-group" id="photoCommentGroup" style="display: none;">
+                    <label for="photoComment">写真についてのコメント（任意）</label>
+                    <textarea id="photoComment" name="photoComment" rows="3" placeholder="写真にまつわる思い出やエピソードがあれば教えてください"></textarea>
+                </div>
+
+                <button class="submit-button" id="submitButton">送信する</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Message -->
+    <div class="success-overlay" id="successOverlay" style="display: none;">
+        <div class="success-message">
+            <div class="success-icon">✓</div>
+            <h3>ご回答ありがとうございました</h3>
+            <p>素敵な思い出の写真もありがとうございます。</p>
+            <p>当日お会いできることを楽しみにしております。</p>
+            <button class="close-button" id="closeSuccessButton">閉じる</button>
+        </div>
+    </div>
 
     <!-- Access Section -->
     <section class="section access-section">
