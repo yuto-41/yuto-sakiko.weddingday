@@ -48,7 +48,7 @@ img {
 .hero-content {
     position: relative;
     z-index: 2;
-    text-align: center;
+    text-align: left;
     color: #fff;
     padding: 40px 20px;
 }
@@ -100,7 +100,7 @@ img {
 .section-content {
     max-width: 800px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
 }
 
 .section-title-en {
@@ -188,7 +188,7 @@ img {
     max-width: 600px;
     margin: 0 auto 80px;
     padding: 0 20px;
-    text-align: center;
+    text-align: left;
 }
 
 .story-subtitle {
@@ -232,7 +232,7 @@ img {
 }
 
 .info-block {
-    text-align: center;
+    text-align: left;
     padding: 30px 20px;
     background: rgba(255, 255, 255, 0.6);
     border-radius: 2px;
@@ -384,7 +384,7 @@ img {
 .rsvp-content {
     max-width: 500px;
     margin: 0 auto;
-    text-align: center;
+    text-align: left;
 }
 
 .rsvp-deadline {
@@ -533,7 +533,7 @@ img {
 .memories-intro {
     max-width: 600px;
     margin: 0 auto 50px;
-    text-align: center;
+    text-align: left;
 }
 
 .memories-intro p {
@@ -550,7 +550,7 @@ img {
 }
 
 .photo-upload-section {
-    text-align: center;
+    text-align: left;
     margin-bottom: 40px;
 }
 
@@ -618,7 +618,7 @@ img {
     font-size: 0.75rem;
     color: #999;
     margin-top: 8px;
-    text-align: center;
+    text-align: left;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -705,7 +705,7 @@ img {
     padding: 60px 40px;
     max-width: 500px;
     width: 90%;
-    text-align: center;
+    text-align: left;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     animation: slideUp 0.4s ease;
 }
@@ -795,7 +795,7 @@ img {
 }
 
 .access-block {
-    text-align: center;
+    text-align: left;
     padding: 30px 20px;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 2px;
@@ -828,7 +828,7 @@ img {
 /* ===== Footer ===== */
 .footer {
     padding: 80px 20px;
-    text-align: center;
+    text-align: left;
     background: #fff;
 }
 
