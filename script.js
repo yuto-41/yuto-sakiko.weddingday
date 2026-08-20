@@ -194,6 +194,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 // フォームデータを取得
                 const formData = new FormData(rsvpForm);
                 
+                console.log('=== FormDataの内容確認 ===');
+                console.log('guestName:', formData.get('guestName'));
+                console.log('guestEmail:', formData.get('guestEmail'));
+                console.log('attendance:', formData.get('attendance'));
+                console.log('companion:', formData.get('companion'));
+                console.log('companionName:', formData.get('companionName'));
+                console.log('allergies:', formData.get('allergies'));
+                console.log('message:', formData.get('message'));
+                console.log('photoComment (getElementById):', document.getElementById('photoComment')?.value);
+                console.log('==========================');
+                
                 console.log('選択されたファイル数:', selectedFiles.length);
                 
                 // ファイルをBase64に変換
@@ -220,8 +231,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('=== 送信データ全体 ===');
                 console.log('送信先URL:', gasUrl);
                 console.log('name:', data.name);
+                console.log('email:', data.email);
                 console.log('attendance:', data.attendance);
+                console.log('companion:', data.companion);
+                console.log('companionName:', data.companionName);
+                console.log('allergies:', data.allergies);
                 console.log('message:', data.message);
+                console.log('photoComment:', data.photoComment);
                 console.log('files配列:', data.files);
                 if (data.files.length > 0) {
                     console.log('最初のファイル情報:');
