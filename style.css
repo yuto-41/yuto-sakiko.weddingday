@@ -221,7 +221,7 @@ img {
 
 .story-slideshow-track {
     display: flex;
-    animation: slide 30s linear infinite;
+    animation: slide 15s linear infinite;
 }
 
 .story-slideshow-track img {
