@@ -352,8 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // ========================================================
 
     const gasUrl =
-        'https://script.google.com/macros/s/AKfycbyCEYybP_eh4anuHN8dvgg2peIoB3Dcs2HE1RqDmnfDvJLnnGentE2UjznSC2bWvjym/exec';
-
+    'https://script.google.com/macros/s/AKfycbyCEYybP_eh4anuHN8dvgg2peIoB3Dcs2HE1RqDmnfDvJLnnGentE2UjznSC2bWvjym/exec';
 
     // ========================================================
     // 送信処理
