@@ -630,10 +630,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     // 成功表示
                     // ------------------------------
 
-                    alert(
-                        'ご回答ありがとうございました！'
-                    );
-
 
                     showSuccessMessage();
 
