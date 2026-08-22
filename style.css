@@ -207,6 +207,40 @@ img {
     font-weight: 300;
 }
 
+/* ===== スライドショー ===== */
+.story-slideshow-wrapper {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 60px;
+}
+
+.story-slideshow {
+    width: 100%;
+    position: relative;
+}
+
+.story-slideshow-track {
+    display: flex;
+    animation: slide 60s linear infinite;
+}
+
+.story-slideshow-track img {
+    width: 400px;
+    height: 300px;
+    object-fit: cover;
+    flex-shrink: 0;
+    margin-right: 20px;
+}
+
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
 /* ===== Wedding Dayセクション ===== */
 .wedding-day-section {
     background: linear-gradient(135deg, #fafafa 0%, #f8f8f8 100%);
@@ -915,6 +949,12 @@ img {
         padding: 18px 30px;
         font-size: 0.85rem;
     }
+    
+    /* スライドショーのスマホ対応 */
+    .story-slideshow-track img {
+        width: 280px;
+        height: 210px;
+    }
 }
 
 @media (min-width: 769px) {
@@ -923,6 +963,11 @@ img {
         grid-template-columns: 1fr 1fr;
         gap: 40px;
         align-items: center;
+    }
+    
+    /* スライドショーを全幅に */
+    .story-slideshow-wrapper {
+        grid-column: 1 / -1;
     }
     
     .story-image {
