@@ -962,3 +962,23 @@ img {
         padding: 50px 60px;
     }
 }
+/* 出会いの写真スライドショー */
+.slideshow {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 4 / 3;
+}
+
+.slideshow img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.5s ease;
+}
+
+.slideshow img:first-child {
+    opacity: 1;
+}

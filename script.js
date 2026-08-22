@@ -1368,5 +1368,32 @@ document.querySelectorAll(
 
         }
     );
+// ========================================================
+// 出会いの写真スライドショー
+// ========================================================
 
+const meetingSlideshow =
+    document.getElementById('meetingSlideshow');
+
+if (meetingSlideshow) {
+
+    const slides =
+        meetingSlideshow.querySelectorAll('img');
+
+    let currentSlide = 0;
+
+    if (slides.length > 1) {
+
+        setInterval(function() {
+
+            slides[currentSlide].style.opacity = '0';
+
+            currentSlide =
+                (currentSlide + 1) % slides.length;
+
+            slides[currentSlide].style.opacity = '1';
+
+        }, 4000);
+    }
+}
 });
